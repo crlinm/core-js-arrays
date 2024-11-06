@@ -383,8 +383,11 @@ function generateOdds(len) {
  *   getElementByIndices(['one','two','three'], [2]) => 'three'  (arr[2])
  *   getElementByIndices([[[ 1, 2, 3]]], [ 0, 0, 1 ]) => 2        (arr[0][0][1])
  */
-function getElementByIndices(/* arr, indices */) {
-  throw new Error('Not implemented');
+function getElementByIndices(arr, indices) {
+  if (indices.length === 1) {
+    return arr[indices[0]];
+  }
+  return getElementByIndices(arr[indices[0]], indices.slice(1, indices.length));
 }
 
 /**
@@ -524,8 +527,26 @@ function findCommonElements(arr1, arr2) {
  *    findLongestIncreasingSubsequence([3, 10, 2, 1, 20]) => 2
  *    findLongestIncreasingSubsequence([50, 3, 10, 7, 40, 80]) => 3
  */
-function findLongestIncreasingSubsequence(/* nums */) {
-  throw new Error('Not implemented');
+function findLongestIncreasingSubsequence(nums) {
+  return nums.reduce(
+    ({ currentLength, previous, maxLength }, item) =>
+      item > previous
+        ? {
+            currentLength: currentLength + 1,
+            previous: item,
+            maxLength: Math.max(maxLength, currentLength + 1),
+          }
+        : {
+            currentLength: 1,
+            previous: item,
+            maxLength,
+          },
+    {
+      currentLength: 0,
+      previous: Number.MIN_VALUE,
+      maxLength: 0,
+    }
+  ).maxLength;
 }
 
 /**
@@ -559,8 +580,10 @@ function propagateItemsByPositionIndex(arr) {
  *    shiftArray(['a', 'b', 'c', 'd'], -1) => ['b', 'c', 'd', 'a']
  *    shiftArray([10, 20, 30, 40, 50], -3) => [40, 50, 10, 20, 30]
  */
-function shiftArray(/* arr, n */) {
-  throw new Error('Not implemented');
+function shiftArray(arr, n) {
+  const first = arr.slice(-n);
+  const second = n > 0 ? arr.slice(0, n + 1) : arr.slice(0, -n);
+  return first.concat(second);
 }
 
 /**
